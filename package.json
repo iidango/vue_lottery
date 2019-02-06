@@ -1,0 +1,13 @@
+{
+  "name": "vue_lottery",
+  "version": "0.0.1",
+  "description": "Lottery",
+  "main": "index.js",
+  "repository": "https://github.com/iidango/vue_lottery.git",
+  "author": "Anonymous uclab student",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "vue": "^2.6.2"
+  }
+}
