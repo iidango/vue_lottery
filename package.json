@@ -22,7 +22,7 @@
     "webpack-dev-server": "^3.1.14"
   },
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --hot --inline --watch-content-base --content-base . --open-page index.html",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
