@@ -1,9 +1,7 @@
-<!-- src/components/Hello.vue -->
+<!-- src/components/Header.vue -->
 <template>
     <div>
-        <div class="greeting">Hello {{name}}{{exclamationMarks}}</div>
-        <button @click="decrement">-</button>
-        <button @click="increment">+</button>
+        <p>Vue Lottery!!<p/>
     </div>
 </template>
 
@@ -26,14 +24,15 @@ export default Vue.extend({
     },
     computed: {
         exclamationMarks(): string {
-            return Array(this.enthusiasm + 1).join('!');
+            // return Array(this.enthusiasm + 1).join('!');
+            return this.enthusiasm + '!';
         }
     }
 });
 </script>
 
 <style>
-// .greeting {
+/* // .greeting {
 //     font-size: 20px;
-// }
+// } */
 </style>

@@ -1,0 +1,25 @@
+// .elected_member{
+//     color: 'red'
+// }
+// div {
+//     width: 300px;
+//     height: 200px;
+//     background: red;
+//     &:before {
+//       content: '';
+//       display: block;
+//       width: 300px;
+//       height: 150px;
+//       background: blue;
+//     }
+//     &.hoge { /* classがhogeのdiv　&がついてるからdivと.hogeがくっつく */
+//       width: 150px;
+//       height: 29px;
+//       background: yellow;
+//     }
+//     .hoge { /* divの中にいるclassがhoge　&がついていないのでdivと.hogeがくっつかない */
+//       width: 120px;
+//       height: 53px;
+//       background: green;
+//     }
+//   }
