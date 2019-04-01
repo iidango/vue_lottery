@@ -43,7 +43,6 @@
 <script lang="ts">
 import Vue from "vue";
 import { MemberList, GroupedMemberList } from "../model/MemberList";
-import { MemberGroupList } from "../model/MemberGroupList";
 import { GroupMemberSelector } from "../model/MemberSelector";
 import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";

@@ -1,6 +1,5 @@
-import { MemberList, GroupedMemberList } from './MemberList'
+import { GroupedMemberList } from './MemberList'
 import { Member } from './Member'
-import { MemberGroupList } from './MemberGroupList'
 import { MemberGroup } from './MemberGroup'
 
 export class MemberSelector {

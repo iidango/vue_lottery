@@ -1,5 +1,3 @@
-import { MemberList } from './MemberList'
-import { Member } from '../model'
 
 export class MemberGroup {
   private static CURRENT_ID: number = 0

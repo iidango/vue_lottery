@@ -1,5 +1,4 @@
 import { Member } from './Member'
-import { MemberGroupList } from './MemberGroupList'
 import { MemberGroup } from './MemberGroup'
 
 export abstract class MemberList {
