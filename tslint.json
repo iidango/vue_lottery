@@ -1,4 +1,6 @@
 {
+    "extends": "tslint-config-standard"
+    /*
     "defaultSeverity": "error",
     "extends": [
         "tslint:recommended"
@@ -20,4 +22,5 @@
         "object-literal-sort-keys": false
     },
     "rulesDirectory": []
+    */
 }

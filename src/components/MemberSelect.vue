@@ -3,10 +3,10 @@
     <div>
         <p>Select members!!<p/>
         <ul>
-            <div v-for="(m_list, g_name) in groups" v-bind:key="g_name">
+            <div v-for="(group, ml) in groupList" v-bind:key="group.id">
                 <div class="group">
-                    group: <button v-on:click="toggle_group(g_name)">{{g_name}}</button>
-                    <div v-for="m in m_list" v-bind:key="m.name">
+                    group: <button v-on:click="toggle_group(group)">{{group.name}}</button>
+                    <div v-for="m in ml" v-bind:key="m.id">
                         <button v-on:click="toggle_member(m)">{{m.name}}</button>
                     </div>
                 </div>
@@ -17,49 +17,37 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {Member, Status} from "../model";
+import {Member} from "../model/Member";
+import {Status} from "../model/Status";
+import { MemberList, GroupedMemberList } from "../model/MemberList";
+import { MemberGroupList } from "../model/MemberGroupList";
+import { GroupMemberSelector } from "../model/MemberSelector";
+import { MemberGroup } from "../model/MemberGroup";
 
 type Prop<T> = () => T;    // this line is necessary to use array as Vue Prop
 export default Vue.extend({
     props: {
-        members: Array as Prop<Member[]>, 
+        memberList: {
+            type: GroupedMemberList, 
+        }, 
         status: Status
     }, 
-    data(): {groups: {[index: string]: Array<Member>; };} {
+    data(): {memberSelector: GroupMemberSelector} {
         return {
-            groups: {},    // initialized by fetch groups
+            memberSelector: new GroupMemberSelector(this.$props.memberList)
         }
     },
     created: function(){
-        this.$data.groups = this.fetch_groups();
+        console.log(this.$props)
     }, 
     methods: {
         toggle_member(m: Member) { 
-            m.toggle_selected();
+            this.$data.memberSelector.toggle(m);
         },
-        toggle_group(g_name: string) { 
-            let frag: boolean = false;
-            for(const m of this.$data.groups[g_name]){
-                frag = m.is_selected || frag;
-            }
-
-            for(const m of this.$data.groups[g_name]){
-                m.is_selected = !frag;
-            }
+        toggle_group(mg: MemberGroup) { 
+            this.$data.memberSelector.toggleGroup(mg);
         },
-        fetch_groups(): Object { 
-            console.log('fetch groups!!');
-            let groups: {[index: string]: Array<Member>; } = {};
-            let group_ids: Array<number> = [];
-            for(const m of this.$props.members){
-                if(group_ids.indexOf(m.group_id)  == -1){
-                    group_ids.push(m.group_id);
-                    groups[m.group] = [];
-                }
-                groups[m.group].push(m);
-            }
-            return groups;
-        },
+        /* 
         add_group() { 
             const g_name: string = 'tmp_group';
             let g_id = Member.add_group_name(g_name);
@@ -72,8 +60,12 @@ export default Vue.extend({
             this.$props.members.push(new_m);
             this.groups[new_m.group].push(new_m);
         },
+        */
     },
     computed: {
+        groupList: function(){
+            return this.$props.memberList.fetchAllGroups()
+        }
     }
 });
 </script>
