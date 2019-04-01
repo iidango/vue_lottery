@@ -3,7 +3,7 @@
     <div id="lottery">
         <div id="member-select">
             <h1>Select members!!</h1>
-            <ul>
+            <v-layout columnß>
                 <div v-for="[group, ml] of groupMap" v-bind:key="group.id">
                     <v-layout row>
                         <v-card>
@@ -16,30 +16,30 @@
 
                             </v-toolbar>
                             <v-list>
-                            <v-list-tile
-                                v-for="m in ml"
-                                :key="m.id"
-                                avatar
-                                @click="toggleMember(m)"
-                            >
-                                <!-- <v-list-tile-action>
-                                <v-icon v-if="item.icon" color="pink">star</v-icon>
-                                </v-list-tile-action> -->
+                                <v-list-tile
+                                    v-for="m in ml"
+                                    :key="m.id"
+                                    avatar
+                                    @click="toggleMember(m)"
+                                >
+                                    <v-list-tile-action>
+                                        <v-icon v-show="isSelected(m)" color="pink">star</v-icon>
+                                    </v-list-tile-action>
 
-                                <v-list-tile-content>
-                                <v-list-tile-title v-text="m.name"></v-list-tile-title>
-                                </v-list-tile-content>
+                                    <v-list-tile-content>
+                                    <v-list-tile-title v-text="m.name"></v-list-tile-title>
+                                    </v-list-tile-content>
 
-                                <!-- <v-list-tile-avatar>
-                                <img :src="item.avatar">
-                                </v-list-tile-avatar> -->
-                            </v-list-tile>
+                                    <!-- <v-list-tile-avatar>
+                                    <img :src="item.avatar">
+                                    </v-list-tile-avatar> -->
+                                </v-list-tile>
                             </v-list>
                         </v-card>
                     </v-layout>
-                </div>
-                <v-btn color="info" @click="createNewMember()">create new member</v-btn>
-            </ul>
+                    </div>
+                </v-layout>
+            <v-btn color="info" @click="createNewMember()">create new member</v-btn>
         </div>
         <div id="setting">
             <h1>Options</h1>
@@ -137,7 +137,12 @@ export default Vue.extend({
                 default:
             }
         }, 
+        isSelected: function(value: Member): boolean{
+            return this.$data.selectedMemberList.includes(value)
+        }
     },
+    filters: {
+    }, 
     computed: {
         currentStatus: function(): string{
             let s: string; 
@@ -156,7 +161,7 @@ export default Vue.extend({
             }
             return s;
         }, 
-    }
+    }, 
 });
 </script>
 
