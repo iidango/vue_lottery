@@ -2,35 +2,58 @@
 <template>
     <div id="lottery">
         <div id="member-select">
-            <p>Select members!!<p/>
+            <h1>Select members!!</h1>
             <ul>
                 <div v-for="[group, ml] of groupMap" v-bind:key="group.id">
-                    <div class="group">
-                        group: <button v-on:click="toggleGroup(group)">{{group.name}}</button>
-                        <div v-for="m in ml" v-bind:key="m.id">
-                            <button v-on:click="toggleMember(m)">{{m.name}}</button>
-                        </div>
-                    </div>
+                    <v-layout row>
+                        <v-card>
+                            <v-toolbar color="indigo" dark>
+                                <!-- <v-btn color="info">{{group.name}}</v-btn> -->
+
+                                <v-toolbar-title @click="toggleGroup(group)">{{group.name}}</v-toolbar-title>
+
+                                <v-spacer></v-spacer>
+
+                            </v-toolbar>
+                            <v-list>
+                            <v-list-tile
+                                v-for="m in ml"
+                                :key="m.id"
+                                avatar
+                                @click="toggleMember(m)"
+                            >
+                                <!-- <v-list-tile-action>
+                                <v-icon v-if="item.icon" color="pink">star</v-icon>
+                                </v-list-tile-action> -->
+
+                                <v-list-tile-content>
+                                <v-list-tile-title v-text="m.name"></v-list-tile-title>
+                                </v-list-tile-content>
+
+                                <!-- <v-list-tile-avatar>
+                                <img :src="item.avatar">
+                                </v-list-tile-avatar> -->
+                            </v-list-tile>
+                            </v-list>
+                        </v-card>
+                    </v-layout>
                 </div>
-                <!-- <div v-for="m in memberList" v-bind:key="m.id">
-                    <button v-on:click="toggleMember(m)">{{m.name}}</button>
-                </div> -->
-                <button v-on:click="createNewMember()">new member</button>
+                <v-btn color="info" @click="createNewMember()">create new member</v-btn>
             </ul>
         </div>
         <div id="setting">
-            <p>Setting!!<p/>
-            <button v-on:click="action()">{{currentStatus}}</button>
+            <h1>Options</h1>
+            <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
         </div>
         <div id="stage">
-            <p>Selected Members!!<p/>
+            <h1>Selected Members!!</h1>
             <ul>
                 <div v-for="m in selectedMemberList" v-bind:key="m.name">
                 <!-- <div v-for="m in hoge" v-bind:key="m.name"> -->
                     {{m.name}}
                 </div>
             </ul>
-            <p>Winner!!<p/>
+            <h2>Winner!!</h2>
             <ul>
                 <div v-for="m in winnerMemberList" v-bind:key="m.name">
                     {{m.name}}
@@ -42,6 +65,10 @@
 
 <script lang="ts">
 import Vue from "vue";
+// import Vuetify from 'vuetify'
+// // Vue.use(Vuetify)
+// import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
+
 import { MemberList, GroupedMemberList } from "../model/MemberList";
 import { GroupMemberSelector } from "../model/MemberSelector";
 import { MemberGroup } from "../model/MemberGroup";

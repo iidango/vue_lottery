@@ -1,15 +1,22 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
+Vue.use(Vuetify)
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 import HeaderComponent from './components/Header.vue'
 import LotteryComponent from './components/Lottery.vue'
+import TestComponent from './components/test.vue'
 
 let v = new Vue({
   el: '#app',
   template: `
-        <div>
-            <header-component :title="title"/>
-            <lottery-component />
-        </div>
+        <v-app>
+          <div>
+              <header-component :title="title"/>
+              <lottery-component />
+              <test-component />
+          </div>
+        </v-app>
     `,
   data: () => {
     return{
@@ -18,6 +25,7 @@ let v = new Vue({
   },
   components: {
     'header-component': HeaderComponent,
-    'lottery-component': LotteryComponent
+    'lottery-component': LotteryComponent,
+    'test-component': TestComponent
   }
 })
