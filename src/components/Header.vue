@@ -1,6 +1,6 @@
 <!-- src/components/Header.vue -->
 <template>
-    <div>
+    <div class="header">
         <p>{{title}}<p/>
     </div>
 </template>
@@ -13,7 +13,7 @@ export default Vue.extend({
 </script>
 
 <style>
-/* // .greeting {
-//     font-size: 20px;
-// } */
+.header {
+    font-weight: bold;
+}
 </style>

@@ -1,65 +1,59 @@
 <!-- src/components/MemberSelect.vue -->
 <template>
     <div id="lottery">
-        <div id="member-select">
-            <h1>Select members!!</h1>
-            <v-layout columnß>
-                <div v-for="[group, ml] of groupMap" v-bind:key="group.id">
+        <v-layout column align-start>
+            <v-flex xs32>
+            <v-layout row>
+            <div class="member-selector">
+                <h1>Member List</h1>
                     <v-layout row>
-                        <v-card>
-                            <v-toolbar color="indigo" dark>
-                                <!-- <v-btn color="info">{{group.name}}</v-btn> -->
+                    <div v-for="[group, ml] of groupMap" :key="group.id" class="group-panel">
+                        <v-layout column>
+                            <v-card>
+                                <v-toolbar color="indigo" @click="toggleGroup(group)" dark>
+                                    <!-- <v-btn color="info">{{group.name}}</v-btn> -->
 
-                                <v-toolbar-title @click="toggleGroup(group)">{{group.name}}</v-toolbar-title>
+                                    <v-toolbar-title>{{group.name}}</v-toolbar-title>
 
-                                <v-spacer></v-spacer>
+                                    <v-spacer></v-spacer>
 
-                            </v-toolbar>
-                            <v-list>
-                                <v-list-tile
-                                    v-for="m in ml"
-                                    :key="m.id"
-                                    avatar
-                                    @click="toggleMember(m)"
-                                >
-                                    <v-list-tile-action>
-                                        <v-icon v-show="isSelected(m)" color="pink">star</v-icon>
-                                    </v-list-tile-action>
+                                </v-toolbar>
+                                <v-list>
+                                    <v-list-tile
+                                        v-for="m in ml"
+                                        :key="m.id"
+                                        avatar
+                                        @click="toggleMember(m)"
+                                        v-bind="memberStyle(m)"
+                                    >
+                                        <v-list-tile-action>
+                                            <v-icon v-show="isWinner(m)" color="pink">star</v-icon>
+                                        </v-list-tile-action>
 
-                                    <v-list-tile-content>
-                                    <v-list-tile-title v-text="m.name"></v-list-tile-title>
-                                    </v-list-tile-content>
+                                        <v-list-tile-content>
+                                        <v-list-tile-title v-text="m.name" :class="{selected: isSelected(m)}"></v-list-tile-title>
+                                        </v-list-tile-content>
 
-                                    <!-- <v-list-tile-avatar>
-                                    <img :src="item.avatar">
-                                    </v-list-tile-avatar> -->
-                                </v-list-tile>
-                            </v-list>
-                        </v-card>
-                    </v-layout>
-                    </div>
-                </v-layout>
-            <v-btn color="info" @click="createNewMember()">create new member</v-btn>
-        </div>
-        <div id="setting">
-            <h1>Options</h1>
-            <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
-        </div>
-        <div id="stage">
-            <h1>Selected Members!!</h1>
-            <ul>
-                <div v-for="m in selectedMemberList" v-bind:key="m.name">
-                <!-- <div v-for="m in hoge" v-bind:key="m.name"> -->
-                    {{m.name}}
-                </div>
-            </ul>
-            <h2>Winner!!</h2>
-            <ul>
-                <div v-for="m in winnerMemberList" v-bind:key="m.name">
-                    {{m.name}}
-                </div>
-            </ul>
-        </div>
+                                        <!-- <v-list-tile-avatar>
+                                        <img :src="item.avatar">
+                                        </v-list-tile-avatar> -->
+                                    </v-list-tile>
+                                </v-list>
+                            </v-card>
+                        </v-layout>
+                        </div>
+                        </v-layout>
+                <v-btn color="info" @click="createNewMember()">add new member(not available now)</v-btn>
+            </div>
+            </v-layout>
+            <v-layout row>
+            <div class="operator">
+                <h1>Options</h1>
+                <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
+            </div>
+            </v-layout>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
@@ -101,7 +95,7 @@ export default Vue.extend({
         ml = dl.loadData()
         ms = new GroupMemberSelector(ml)
 
-        lottery = new SimpleLottery(ml, this.$data.status)
+        lottery = new SimpleLottery(ms.selectedMemberList, this.$data.status)
 
         this.$data.memberList = ml.members
         this.$data.selectedMemberList = ms.selectedMemberList
@@ -139,7 +133,15 @@ export default Vue.extend({
         }, 
         isSelected: function(value: Member): boolean{
             return this.$data.selectedMemberList.includes(value)
-        }
+        }, 
+        isWinner: function(value: Member): boolean{
+            return this.$data.winnerMemberList.includes(value)
+        }, 
+        memberStyle: function(m: Member){
+            return {
+                color: this.isSelected(m)? 'red': ''
+            }
+        }, 
     },
     filters: {
     }, 
@@ -166,4 +168,13 @@ export default Vue.extend({
 </script>
 
 <style>
+.operator{
+    margin: 10px;
+}
+.member-selector{
+    margin: 10px;
+}
+.group-panel {
+    margin: 10px;
+}
 </style>

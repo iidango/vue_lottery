@@ -7,8 +7,8 @@ export class SimpleLottery {
   protected _status: Status
   protected _winnerList: Array<Member>
 
-  constructor (memberList?: MemberList, status?: Status) {
-    this._candidates = memberList ? memberList.members : []
+  constructor (memberList?: Array<Member>, status?: Status) {
+    this._candidates = memberList ? memberList : []
     this._winnerList = []
     this._status = status ? status : new Status()
   }
@@ -62,7 +62,7 @@ export class SimpleLottery {
 export class LabeledLottery extends SimpleLottery {
   private _labels: Array<string>
 
-  constructor (memberList?: MemberList, status?: Status) {
+  constructor (memberList?: Array<Member>, status?: Status) {
     super(memberList, status)
     this._labels = []
     this._winnerList = []
