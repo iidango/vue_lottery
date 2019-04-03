@@ -1,9 +1,10 @@
 import { MemberList, GroupedMemberList } from '../model/MemberList'
 import { Member } from '../model/Member'
 import { MemberGroup } from '../model/MemberGroup'
+import { GroupedList } from '../model/GroupedList'
 
 abstract class DataLoader {
-  abstract loadData (): MemberList
+  abstract loadData (): any
 }
 
 export class TestDataLoader extends DataLoader {
@@ -33,8 +34,8 @@ export class TestDataLoader extends DataLoader {
 }
 
 export class YamlDataLoader extends DataLoader {
-  public loadData (): GroupedMemberList {
-    const ml: GroupedMemberList = new GroupedMemberList()
+  public loadData (): GroupedList {
+    const ml: GroupedList = new GroupedList()
     let data = require('../memberList.yml')
 
     for (const mgName in data['memberList']) {

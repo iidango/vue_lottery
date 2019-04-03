@@ -69,47 +69,55 @@ import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
 import { Status, State } from "../model/Status";
 import { TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
-import { SimpleLottery } from "../model/Lottery";
+import { SimpleLottery, Lottery } from "../model/Lottery";
+import { GroupedList } from "../model/GroupedList";
+import { GroupSelector, Selector } from "../model/Selector";
 
 
 type Prop<T> = () => T;    // this line is necessary to use array as Vue Prop
-let ms: GroupMemberSelector
-let ml: GroupedMemberList
-let lottery: SimpleLottery
+let gml: GroupedList
+let gms: GroupSelector
+// let lottery: SimpleLottery
+let lottery: Lottery
 export default Vue.extend({
     props: {
     }, 
-    data: (): {status: Status, memberList: Array<Member>, selectedMemberList: Array<Member>, winnerMemberList: Array<Member>, groupMap: Map<MemberGroup, Set<number>>} =>{
+    data: (): {status: Status, memberList: Array<object>, groupMap: Map<MemberGroup, Set<any>>} =>{
     // data: () =>{
         return {
             status: new Status(), 
             memberList: [], 
-            selectedMemberList: [], 
-            winnerMemberList: [], 
-            groupMap: new Map<MemberGroup, Set<number>>(), 
+            groupMap: new Map<MemberGroup, Set<any>>(), 
         }
     }, 
     created: function() {
         console.log('lottery on created')
         // const dl: TestDataLoader = new TestDataLoader()
         const dl: YamlDataLoader = new YamlDataLoader()
-        ml = dl.loadData()
+        gml = dl.loadData()
 
-        ms = new GroupMemberSelector(ml)
+        // ms = new GroupMemberSelector(ml)
+        gms = new GroupSelector(gml)
+    
+        // lottery = new SimpleLottery(ms.selectedMemberList, this.$data.status)
+        lottery = new Lottery(gml.members, this.$data.status)
 
-        lottery = new SimpleLottery(ms.selectedMemberList, this.$data.status)
+        this.$data.memberList = gml.members
+        this.$data.groupMap = gms.fetchGroupMap()
 
-        this.$data.memberList = ml.members
-        this.$data.selectedMemberList = ms.selectedMemberList
-        this.$data.winnerMemberList = lottery.winnerList
-        this.$data.groupMap = ms.fetchGroupMap()
+        this.setMemberProparty()
+
+        console.log('this.$data.memberList')
+        console.log(this.$data.memberList)
+        console.log('this.$data.groupMap')
+        console.log(this.$data.groupMap)
     }, 
     methods: {
         toggleMember(m: Member) { 
-            ms.toggle(m);
+            gms.toggle(m);
         },
         toggleGroup(mg: MemberGroup) { 
-            ms.toggleGroup(mg);
+            gms.toggleGroup(mg);
         },
         createNewMember(gName?: string, mName?: string) { 
             gName = gName? gName: ' no name group'
@@ -118,8 +126,8 @@ export default Vue.extend({
             const g = new MemberGroup(gName)
 
             // TODO please use $set function to detect groupMap update
-            ml.members.push(m)
-            ml.setGroup(g, m)
+            gml.members.push(m)
+            gml.setGroup(g, m)
             console.log(this.$data.groupMap)
         },
         action(): void{
@@ -133,11 +141,19 @@ export default Vue.extend({
                 default:
             }
         }, 
-        isSelected: function(value: Member): boolean{
-            return this.$data.selectedMemberList.includes(value)
+        isSelected: function(v: object): boolean{
+            // return this.$data.selectedMemberList.includes(value)
+            return gms.isSelected(v)
         }, 
-        isWinner: function(value: Member): boolean{
-            return this.$data.winnerMemberList.includes(value)
+        isWinner: function(v: Member): boolean{
+            return lottery.isWinner(v)
+        }, 
+        setMemberProparty: function(){
+            this.$data.memberList.forEach((m: object) => {
+                this.$set(m, Selector.SELECTED, false)
+                this.$set(m, 'weight', 0.0)
+                this.$set(m, 'rank', 0.0)
+            });
         }, 
         memberStyle: function(m: Member){
             return {
