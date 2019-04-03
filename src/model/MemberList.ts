@@ -26,7 +26,11 @@ export class GroupedMemberList extends MemberList {
     return this._groupMap
   }
 
-  public setGroup (mg: MemberGroup, mid: Member) {
+  public setGroup (mg: MemberGroup, m: Member) {
+    if (!this.members.includes(m)) {
+      this.members.push(m)
+    }
+
     let mList = this.groupMap.get(mg)
 
     if (mList === undefined) {
@@ -34,7 +38,7 @@ export class GroupedMemberList extends MemberList {
       this.groupMap.set(mg, mList)
     }
 
-    mList.add(mid)
+    mList.add(m)
   }
 
   public getGroupMember (mg: MemberGroup): Array<Member> {
