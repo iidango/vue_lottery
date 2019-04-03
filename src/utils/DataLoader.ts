@@ -1,4 +1,3 @@
-import { MemberList, GroupedMemberList } from '../model/MemberList'
 import { Member } from '../model/Member'
 import { MemberGroup } from '../model/MemberGroup'
 import { GroupedList } from '../model/GroupedList'
@@ -9,8 +8,8 @@ abstract class DataLoader {
 
 export class TestDataLoader extends DataLoader {
 
-  public loadData (): GroupedMemberList {
-    const ml: GroupedMemberList = new GroupedMemberList()
+  public loadData (): GroupedList {
+    const ml: GroupedList = new GroupedList()
     const m1: Member = new Member('user1')
     const m2: Member = new Member('user2')
     const m3: Member = new Member('user3')

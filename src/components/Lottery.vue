@@ -63,13 +63,11 @@ import Vue from "vue";
 // // Vue.use(Vuetify)
 // import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
-import { MemberList, GroupedMemberList } from "../model/MemberList";
-import { GroupMemberSelector } from "../model/MemberSelector";
 import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
 import { Status, State } from "../model/Status";
 import { TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
-import { SimpleLottery, Lottery } from "../model/Lottery";
+import { Lottery } from "../model/Lottery";
 import { GroupedList } from "../model/GroupedList";
 import { GroupSelector, Selector } from "../model/Selector";
 

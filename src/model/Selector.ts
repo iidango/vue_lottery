@@ -1,4 +1,3 @@
-import { GroupedMemberList } from './MemberList'
 import { GroupedList } from './GroupedList'
 
 export class Selector {
