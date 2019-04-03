@@ -142,48 +142,43 @@ export class Lottery {
     return m[Lottery.WINNER]
   }
 
+  public runOnce () {
+    this.setRunningState()
+    this.run()
+    this.setFinishState()
+  }
+
   // random selection
   public run (): void {
-    this.setRunningState()
-
     if (this.candidates.length !== 0) {
       const winnerId = Math.floor(Math.random() * this.candidates.length)
       const winner = this.candidates[winnerId]
 
-      winner[Lottery.WINNER] = true
+      this.candidates.forEach((m, i) => m[Lottery.WINNER] = (i === winnerId))
     } else {
       console.log('No member selected!!')
     }
-    this.setFinishState()
   }
 }
 
+// TOOD
 export class WeightedLottery extends Lottery {
+  static WEIGHT = 'weight'
+  static RANK = 'rank'
+
   constructor (candidates?: Array<any>, status?: Status) {
     super(candidates, status)
+
+    this.candidates.forEach(m => {
+      if (m[WeightedLottery.WEIGHT] === undefined) {
+        console.log('please set weight')
+      }
+      if (m[WeightedLottery.RANK] === undefined) {
+        console.log('please set rank')
+      }
+    })
   }
 
-  protected get status (): Status {
-    return this._status
-  }
-
-  public get candidates (): Array<any> {
-    return this._candidates
-  }
-
-  public set candidates (v: Array<any>) {
-    this._candidates = v
-  }
-
-  protected setRunningState () {
-    this.status.currentState = State.Selecting
-  }
-
-  protected setFinishState () {
-    this.status.currentState = State.Waiting
-  }
-
-  // random selection
   public run (): void {
     this.setRunningState()
     if (this.candidates.length !== 0) {

@@ -106,11 +106,6 @@ export default Vue.extend({
         this.$data.groupMap = gms.fetchGroupMap()
 
         this.setMemberProparty()
-
-        console.log('this.$data.memberList')
-        console.log(this.$data.memberList)
-        console.log('this.$data.groupMap')
-        console.log(this.$data.groupMap)
     }, 
     methods: {
         toggleMember(m: Member) { 
@@ -133,7 +128,8 @@ export default Vue.extend({
         action(): void{
             switch(this.$data.status.currentState){
                 case State.Waiting:
-                    lottery.run()
+                    lottery.candidates = this.selectedMemberList
+                    lottery.runOnce()
                     break;
                 case State.Selecting:
                     break;
@@ -151,6 +147,7 @@ export default Vue.extend({
         setMemberProparty: function(){
             this.$data.memberList.forEach((m: object) => {
                 this.$set(m, Selector.SELECTED, false)
+                this.$set(m, Lottery.WINNER, false)
                 this.$set(m, 'weight', 0.0)
                 this.$set(m, 'rank', 0.0)
             });
@@ -181,6 +178,9 @@ export default Vue.extend({
             }
             return s;
         }, 
+        selectedMemberList: function(): Array<object>{
+            return this.$data.memberList.filter(this.isSelected)
+        }
     }, 
 });
 </script>
