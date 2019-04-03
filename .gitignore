@@ -1,5 +1,5 @@
 .DS_Store
-# src/memberList.yml
+src/memberList.yml
 
 /lib
 /lib-legacy
