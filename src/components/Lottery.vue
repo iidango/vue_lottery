@@ -1,60 +1,57 @@
 <!-- src/components/MemberSelect.vue -->
 <template>
-    <div id="lottery">
-        <v-layout column align-start>
-            <v-flex xs32>
+  <div id="lottery">
+    <v-layout column align-start>
+      <v-flex xs32>
+        <v-layout row>
+          <div class="member-selector">
+            <h1>Member List</h1>
             <v-layout row>
-            <div class="member-selector">
-                <h1>Member List</h1>
-                    <v-layout row>
-                    <div v-for="[group, ml] of groupMap" :key="group.id" class="group-panel">
-                        <v-layout column>
-                            <v-card>
-                                <v-toolbar color="indigo" @click="toggleGroup(group)" dark>
-                                    <!-- <v-btn color="info">{{group.name}}</v-btn> -->
+              <div v-for="[group, ml] of groupMap" :key="group.id" class="group-panel">
+                <v-layout column>
+                  <v-card>
+                    <v-toolbar color="indigo" @click="toggleGroup(group)" dark>
+                      <v-toolbar-title>{{group.name}}</v-toolbar-title>
 
-                                    <v-toolbar-title>{{group.name}}</v-toolbar-title>
+                      <v-spacer></v-spacer>
+                    </v-toolbar>
+                    <v-list>
+                      <v-list-tile
+                        v-for="m in ml"
+                        :key="m.id"
+                        avatar
+                        @click="toggleMember(m)"
+                        v-bind="memberStyle(m)"
+                      >
+                        <v-list-tile-action>
+                          <v-icon v-show="isWinner(m)" color="pink">star</v-icon>
+                        </v-list-tile-action>
 
-                                    <v-spacer></v-spacer>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-text="m.name" :class="{selected: isSelected(m)}"></v-list-tile-title>
+                        </v-list-tile-content>
 
-                                </v-toolbar>
-                                <v-list>
-                                    <v-list-tile
-                                        v-for="m in ml"
-                                        :key="m.id"
-                                        avatar
-                                        @click="toggleMember(m)"
-                                        v-bind="memberStyle(m)"
-                                    >
-                                        <v-list-tile-action>
-                                            <v-icon v-show="isWinner(m)" color="pink">star</v-icon>
-                                        </v-list-tile-action>
-
-                                        <v-list-tile-content>
-                                        <v-list-tile-title v-text="m.name" :class="{selected: isSelected(m)}"></v-list-tile-title>
-                                        </v-list-tile-content>
-
-                                        <!-- <v-list-tile-avatar>
+                        <!-- <v-list-tile-avatar>
                                         <img :src="item.avatar">
-                                        </v-list-tile-avatar> -->
-                                    </v-list-tile>
-                                </v-list>
-                            </v-card>
-                        </v-layout>
-                        </div>
-                        </v-layout>
-                <v-btn color="info" @click="createNewMember()">add new member(not available now)</v-btn>
-            </div>
+                        </v-list-tile-avatar>-->
+                      </v-list-tile>
+                    </v-list>
+                  </v-card>
+                </v-layout>
+              </div>
             </v-layout>
-            <v-layout row>
-            <div class="operator">
-                <h1>Options</h1>
-                <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
-            </div>
-            </v-layout>
-            </v-flex>
+            <!-- <v-btn color="info" @click="createNewMember()">add new member(not available now)</v-btn> -->
+          </div>
         </v-layout>
-    </div>
+        <v-layout row>
+          <div class="operator">
+            <h1>Options</h1>
+            <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
+          </div>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </div>
 </template>
 
 <script lang="ts">
@@ -71,124 +68,125 @@ import { Lottery, WeightedLottery } from "../model/Lottery";
 import { GroupedList } from "../model/GroupedList";
 import { GroupSelector, Selector } from "../model/Selector";
 
-
-type Prop<T> = () => T;    // this line is necessary to use array as Vue Prop
-let gml: GroupedList
-let gms: GroupSelector
+type Prop<T> = () => T; // this line is necessary to use array as Vue Prop
+let gml: GroupedList;
+let gms: GroupSelector;
 // let lottery: SimpleLottery
-let lottery: Lottery
+let lottery: Lottery;
 export default Vue.extend({
-    props: {
-    }, 
-    data: (): {status: Status, memberList: Array<object>, groupMap: Map<MemberGroup, Set<any>>} =>{
+  props: {},
+  data: (): {
+    status: Status;
+    memberList: Array<object>;
+    groupMap: Map<MemberGroup, Set<any>>;
+  } => {
     // data: () =>{
-        return {
-            status: new Status(), 
-            memberList: [], 
-            groupMap: new Map<MemberGroup, Set<any>>(), 
-        }
-    }, 
-    created: function() {
-        console.log('lottery on created')
-        // const dl: TestDataLoader = new TestDataLoader()
-        const dl: YamlDataLoader = new YamlDataLoader()
-        gml = dl.loadData()
+    return {
+      status: new Status(),
+      memberList: [],
+      groupMap: new Map<MemberGroup, Set<any>>()
+    };
+  },
+  created: function() {
+    console.log("lottery on created");
+    // const dl: TestDataLoader = new TestDataLoader()
+    const dl: YamlDataLoader = new YamlDataLoader();
+    gml = dl.loadData();
 
-        gms = new GroupSelector(gml)
-    
-        lottery = new Lottery(gml.members, this.$data.status)
+    gms = new GroupSelector(gml);
 
-        this.$data.memberList = gml.members
-        this.$data.groupMap = gms.fetchGroupMap()
+    lottery = new Lottery(gml.members, this.$data.status);
 
-        this.setMemberProparty()
-    }, 
-    methods: {
-        toggleMember(m: Member) { 
-            gms.toggle(m);
-        },
-        toggleGroup(mg: MemberGroup) { 
-            gms.toggleGroup(mg);
-        },
-        createNewMember(gName?: string, mName?: string) { 
-            gName = gName? gName: ' no name group'
-            mName = mName? mName: ' no name member'
-            const m = new Member(gName)
-            const g = new MemberGroup(gName)
+    this.$data.memberList = gml.members;
+    this.$data.groupMap = gms.fetchGroupMap();
 
-            // TODO please use $set function to detect groupMap update
-            gml.members.push(m)
-            gml.setGroup(g, m)
-            console.log(this.$data.groupMap)
-        },
-        action(): void{
-            switch(this.$data.status.currentState){
-                case State.Waiting:
-                    lottery.candidates = this.selectedMemberList
-                    lottery.start()
-                    break;
-                case State.Selecting:
-                    lottery.stop()
-                    break;
-                case State.Selected:
-                default:
-            }
-        }, 
-        isSelected: function(v: object): boolean{
-            return gms.isSelected(v)
-        }, 
-        isWinner: function(v: Member): boolean{
-            return lottery.isWinner(v)
-        }, 
-        setMemberProparty: function(){
-            this.$data.memberList.forEach((m: object) => {
-                this.$set(m, Selector.SELECTED, false)
-                this.$set(m, Lottery.WINNER, false)
-                this.$set(m, WeightedLottery.WEIGHT, 0.0)
-                this.$set(m, WeightedLottery.RANK, 0.0)
-            });
-        }, 
-        memberStyle: function(m: Member){
-            return {
-                color: this.isSelected(m)? 'red': ''
-            }
-        }, 
+    this.setMemberProparty();
+  },
+  methods: {
+    toggleMember(m: Member) {
+      gms.toggle(m);
     },
-    filters: {
-    }, 
-    computed: {
-        currentStatus: function(): string{
-            let s: string; 
-            switch(this.$data.status.currentState){
-                case State.Waiting:
-                    s = 'Start!!';
-                    break;
-                case State.Selecting:
-                    s = 'Selecting!!';
-                    break;
-                case State.Selected:
-                    s = 'Reset!!';
-                    break;
-                default:
-                    s = 'invalid state';
-            }
-            return s;
-        }, 
-        selectedMemberList: function(): Array<object>{
-            return this.$data.memberList.filter(this.isSelected)
-        }
-    }, 
+    toggleGroup(mg: MemberGroup) {
+      gms.toggleGroup(mg);
+    },
+    createNewMember(gName?: string, mName?: string) {
+      gName = gName ? gName : " no name group";
+      mName = mName ? mName : " no name member";
+      const m = new Member(gName);
+      const g = new MemberGroup(gName);
+
+      // TODO please use $set function to detect groupMap update
+      gml.members.push(m);
+      gml.setGroup(g, m);
+      console.log(this.$data.groupMap);
+    },
+    action(): void {
+      switch (this.$data.status.currentState) {
+        case State.Waiting:
+          lottery.candidates = this.selectedMemberList;
+          lottery.start();
+          break;
+        case State.Selecting:
+          lottery.stop();
+          break;
+        case State.Selected:
+        default:
+      }
+    },
+    isSelected: function(v: object): boolean {
+      return gms.isSelected(v);
+    },
+    isWinner: function(v: Member): boolean {
+      return lottery.isWinner(v);
+    },
+    setMemberProparty: function() {
+      this.$data.memberList.forEach((m: object) => {
+        this.$set(m, Selector.SELECTED, false);
+        this.$set(m, Lottery.WINNER, false);
+        this.$set(m, WeightedLottery.WEIGHT, 0.0);
+        this.$set(m, WeightedLottery.RANK, 0.0);
+      });
+    },
+    memberStyle: function(m: Member) {
+      return {
+        color: this.isSelected(m) ? "red" : ""
+      };
+    }
+  },
+  filters: {},
+  computed: {
+    currentStatus: function(): string {
+      let s: string;
+      switch (this.$data.status.currentState) {
+        case State.Waiting:
+          s = "Start!!";
+          break;
+        case State.Selecting:
+          s = "Selecting!!";
+          break;
+        case State.Selected:
+          s = "Reset!!";
+          break;
+        default:
+          s = "invalid state";
+      }
+      return s;
+    },
+    selectedMemberList: function(): Array<object> {
+      return this.$data.memberList.filter(this.isSelected);
+    }
+  }
 });
 </script>
 
 <style>
-.operator{
-    margin: 10px;
+.operator {
+  margin: 10px;
 }
-.member-selector{
-    margin: 10px;
+.member-selector {
+  margin: 10px;
 }
 .group-panel {
-    margin: 10px;
+  margin: 10px;
 }
 </style>
