@@ -67,7 +67,7 @@ import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
 import { Status, State } from "../model/Status";
 import { TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
-import { Lottery } from "../model/Lottery";
+import { Lottery, WeightedLottery } from "../model/Lottery";
 import { GroupedList } from "../model/GroupedList";
 import { GroupSelector, Selector } from "../model/Selector";
 
@@ -94,10 +94,8 @@ export default Vue.extend({
         const dl: YamlDataLoader = new YamlDataLoader()
         gml = dl.loadData()
 
-        // ms = new GroupMemberSelector(ml)
         gms = new GroupSelector(gml)
     
-        // lottery = new SimpleLottery(ms.selectedMemberList, this.$data.status)
         lottery = new Lottery(gml.members, this.$data.status)
 
         this.$data.memberList = gml.members
@@ -127,16 +125,16 @@ export default Vue.extend({
             switch(this.$data.status.currentState){
                 case State.Waiting:
                     lottery.candidates = this.selectedMemberList
-                    lottery.runOnce()
+                    lottery.start()
                     break;
                 case State.Selecting:
+                    lottery.stop()
                     break;
                 case State.Selected:
                 default:
             }
         }, 
         isSelected: function(v: object): boolean{
-            // return this.$data.selectedMemberList.includes(value)
             return gms.isSelected(v)
         }, 
         isWinner: function(v: Member): boolean{
@@ -146,8 +144,8 @@ export default Vue.extend({
             this.$data.memberList.forEach((m: object) => {
                 this.$set(m, Selector.SELECTED, false)
                 this.$set(m, Lottery.WINNER, false)
-                this.$set(m, 'weight', 0.0)
-                this.$set(m, 'rank', 0.0)
+                this.$set(m, WeightedLottery.WEIGHT, 0.0)
+                this.$set(m, WeightedLottery.RANK, 0.0)
             });
         }, 
         memberStyle: function(m: Member){
