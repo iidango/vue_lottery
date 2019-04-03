@@ -68,7 +68,7 @@ import { GroupMemberSelector } from "../model/MemberSelector";
 import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
 import { Status, State } from "../model/Status";
-import { TestDataLoader } from "../utils/DataLoader";
+import { TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
 import { SimpleLottery } from "../model/Lottery";
 
 
@@ -91,8 +91,10 @@ export default Vue.extend({
     }, 
     created: function() {
         console.log('lottery on created')
-        const dl: TestDataLoader = new TestDataLoader()
+        // const dl: TestDataLoader = new TestDataLoader()
+        const dl: YamlDataLoader = new YamlDataLoader()
         ml = dl.loadData()
+
         ms = new GroupMemberSelector(ml)
 
         lottery = new SimpleLottery(ms.selectedMemberList, this.$data.status)

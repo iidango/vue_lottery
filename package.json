@@ -32,6 +32,7 @@
     "@mdi/font": "^3.5.95",
     "eslint-plugin-typescript": "^0.14.0",
     "file-loader": "^3.0.1",
+    "js-yaml-loader": "^1.0.1",
     "material-design-icons-iconfont": "^4.0.5",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
@@ -40,6 +41,7 @@
     "typescript-eslint-parser": "^22.0.0",
     "vue-style-loader": "^4.1.2",
     "vuetify": "^1.5.8",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "yaml-loader": "^0.5.0"
   }
 }

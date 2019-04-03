@@ -31,3 +31,21 @@ export class TestDataLoader extends DataLoader {
 
   }
 }
+
+export class YamlDataLoader extends DataLoader {
+  public loadData (): GroupedMemberList {
+    const ml: GroupedMemberList = new GroupedMemberList()
+    let data = require('../memberList.yml')
+
+    for (const mgName in data['memberList']) {
+      const mg = new MemberGroup(mgName)
+      const members: Array<Member> = []
+      data['memberList'][mgName].forEach((mName: any) => {
+        const member: Member = new Member(mName)
+        ml.setGroup(mg, member)
+      })
+    }
+
+    return ml
+  }
+}

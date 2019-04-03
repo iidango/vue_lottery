@@ -34,13 +34,6 @@ module.exports = {
           appendTsSuffixTo: [/\.vue$/],
         }
       },
-      // {
-      //   test: /\.(png|jpg|gif|svg)$/,
-      //   loader: 'file-loader',
-      //   options: {
-      //     name: '[name].[ext]?[hash]'
-      //   }
-      // },
       {
         test: /\.css$/,
         use: [
@@ -51,7 +44,13 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
         loader: 'file-loader?name=assets/[name].[hash].[ext]'
-      }
+      }, 
+      {
+        test: /\.(yml|yaml)$/,
+        use: [
+          'js-yaml-loader'
+        ]
+      }, 
     ]
   },
   resolve: {
