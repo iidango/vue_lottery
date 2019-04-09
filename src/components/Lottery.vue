@@ -115,7 +115,6 @@ export default Vue.extend({
     // lottery = new Lottery(gml.members, this.$data.status);
     lottery = new WeightedLottery(
       gml.members,
-      this.$data.status,
       this.$data.winnerNum
     );
 

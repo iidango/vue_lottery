@@ -4,15 +4,9 @@ export class Lottery {
   static WINNER = 'winner'
 
   protected _candidates: Array<any>
-  protected _status: Status
 
-  constructor (candidates?: Array<any>, status?: Status) {
+  constructor (candidates?: Array<any>) {
     this._candidates = candidates ? candidates : []
-    this._status = status ? status : new Status()
-  }
-
-  protected get status (): Status {
-    return this._status
   }
 
   public get candidates (): Array<any> {
@@ -23,20 +17,8 @@ export class Lottery {
     this._candidates = v
   }
 
-  protected setRunningState () {
-    this.status.currentState = State.Selecting
-  }
-
-  protected setFinishState () {
-    this.status.currentState = State.Waiting
-  }
-
   public isWinner (m: any): boolean {
     return m[Lottery.WINNER]
-  }
-
-  public isRunning (): boolean {
-    return this.status.currentState === State.Selecting
   }
 
   // random selection
@@ -66,8 +48,9 @@ export class WeightedLottery extends Lottery {
 
   private _winnerNum: number
 
-  constructor (candidates?: Array<any>, status?: Status, winnerNum?: number) {
-    super(candidates, status)
+  constructor (candidates?: Array<any>, winnerNum?: number) {
+    super(candidates)
+    this._winnerNum = winnerNum ? winnerNum : 1
 
     this.candidates.forEach(m => {
       if (m[WeightedLottery.WEIGHT] === undefined) {
@@ -77,8 +60,6 @@ export class WeightedLottery extends Lottery {
         console.log('please set rank')
       }
     })
-
-    this._winnerNum = winnerNum ? winnerNum : 1
   }
 
   public get winnerNum (): number {
@@ -117,10 +98,6 @@ export class WeightedLottery extends Lottery {
       super.setWinners(winners)
     }
   }
-
-  // private hasCandidate () {
-  //   return !this.candidates.every(m => m[WeightedLottery.WEIGHT] === 0)
-  // }
 
   private normalize () {
     let weightSum = 0
