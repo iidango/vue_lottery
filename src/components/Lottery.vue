@@ -56,7 +56,6 @@
                 type="number"
                 v-model="winnerNum"
                 style="width: 50px"
-                @change="updateLotterySetting"
               >
             </h2>
             <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
@@ -69,9 +68,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-// import Vuetify from 'vuetify'
-// // Vue.use(Vuetify)
-// import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
