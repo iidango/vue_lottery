@@ -15,7 +15,7 @@
 
                       <v-spacer></v-spacer>
                     </v-toolbar>
-                    <v-list>
+                    <v-list three-line>
                       <v-list-tile
                         v-for="m in ml"
                         :key="m.id"
@@ -30,6 +30,10 @@
                         <v-list-tile-content>
                           <v-list-tile-title v-text="m.name" :class="{selected: isSelected(m)}"></v-list-tile-title>
                         </v-list-tile-content>
+
+                        <v-list-tile avatar>
+                            <input type="number" v-model="m.weight" style="width: 30px">
+                        </v-list-tile>
 
                         <!-- <v-list-tile-avatar>
                                         <img :src="item.avatar">
@@ -96,6 +100,7 @@ export default Vue.extend({
     gms = new GroupSelector(gml);
 
     lottery = new Lottery(gml.members, this.$data.status);
+    // lottery = new WeightedLottery(gml.members, this.$data.status, 3);
 
     this.$data.memberList = gml.members;
     this.$data.groupMap = gms.fetchGroupMap();
