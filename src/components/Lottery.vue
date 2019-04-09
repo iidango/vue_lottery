@@ -32,7 +32,7 @@
                         </v-list-tile-content>
 
                         <v-list-tile avatar>
-                            <input type="number" v-model="m.weight" style="width: 30px">
+                            <input type="number" v-model="m.weight" style="width: 40px">
                         </v-list-tile>
 
                         <!-- <v-list-tile-avatar>
@@ -50,6 +50,9 @@
         <v-layout row>
           <div class="operator">
             <h1>Options</h1>
+            <h2>
+              Member Num: <input type="number" v-model="winnerNum" style="width: 50px" @change="updateLotterySetting">
+            </h2>
             <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
           </div>
         </v-layout>
@@ -83,12 +86,14 @@ export default Vue.extend({
     status: Status;
     memberList: Array<object>;
     groupMap: Map<MemberGroup, Set<any>>;
+    winnerNum: number;
   } => {
     // data: () =>{
     return {
       status: new Status(),
       memberList: [],
-      groupMap: new Map<MemberGroup, Set<any>>()
+      groupMap: new Map<MemberGroup, Set<any>>(), 
+      winnerNum: 1,
     };
   },
   created: function() {
@@ -99,8 +104,8 @@ export default Vue.extend({
 
     gms = new GroupSelector(gml);
 
-    lottery = new Lottery(gml.members, this.$data.status);
-    // lottery = new WeightedLottery(gml.members, this.$data.status, 3);
+    // lottery = new Lottery(gml.members, this.$data.status);
+    lottery = new WeightedLottery(gml.members, this.$data.status, this.$data.winnerNum);
 
     this.$data.memberList = gml.members;
     this.$data.groupMap = gms.fetchGroupMap();
@@ -128,7 +133,7 @@ export default Vue.extend({
     action(): void {
       switch (this.$data.status.currentState) {
         case State.Waiting:
-          lottery.candidates = this.selectedMemberList;
+          this.updateLotterySetting()
           lottery.start();
           break;
         case State.Selecting:
@@ -148,7 +153,7 @@ export default Vue.extend({
       this.$data.memberList.forEach((m: object) => {
         this.$set(m, Selector.SELECTED, false);
         this.$set(m, Lottery.WINNER, false);
-        this.$set(m, WeightedLottery.WEIGHT, 0.0);
+        this.$set(m, WeightedLottery.WEIGHT, 1.0);
         this.$set(m, WeightedLottery.RANK, 0.0);
       });
     },
@@ -156,7 +161,11 @@ export default Vue.extend({
       return {
         color: this.isSelected(m) ? "red" : ""
       };
-    }
+    }, 
+    updateLotterySetting() {
+      (lottery as WeightedLottery).winnerNum = this.$data.winnerNum
+      lottery.candidates = this.selectedMemberList;
+    },
   },
   filters: {},
   computed: {

@@ -13,6 +13,7 @@ export class Lottery {
     this._status = status ? status : new Status()
     this._timerId = undefined
     this._timerInterval = 10
+    // this._timerInterval = 100    // for debug
   }
 
   protected get status (): Status {
@@ -98,7 +99,6 @@ export class Lottery {
   }
 }
 
-// TOOD
 export class WeightedLottery extends Lottery {
   static WEIGHT = 'weight'
   static RANK = 'rank'
@@ -120,19 +120,25 @@ export class WeightedLottery extends Lottery {
     this._winnerNum = winnerNum ? winnerNum : 1
   }
 
-  private get winnerNum (): number {
+  public get winnerNum (): number {
     return this._winnerNum
+  }
+
+  public set winnerNum (v: number) {
+    this._winnerNum = v
   }
 
   public run (): void {
     if (this.isRunning()) {
-      if (this.hasCandidate()) {
-        let order = []
+      if (this.candidates.length !== 0) {
+        let order: Array<any> = []
 
         this.candidates.forEach((m, i) => {
           m[WeightedLottery.RANK] = Math.random() * m[WeightedLottery.WEIGHT]
           order.push([m[WeightedLottery.RANK], i])
         })
+
+        this.setWinner(order)
 
       } else {
         console.log('No member selected!!')
@@ -144,19 +150,18 @@ export class WeightedLottery extends Lottery {
     if (typeof arg === 'number') {
       super.setWinner(arg)
     } else {
-      arg.sort((a, b) => a[0] - b[0])
-      console.log(arg)
+      arg.sort((a, b) => - (a[0] - b[0]))
       let winners = []
-      for (let i = 0; i < this.winnerNum; i++) {
-        winners.push(i)
+      for (let i = 0; (i < this.winnerNum) && i < arg.length; i++) {
+        winners.push(arg[i][1])
       }
       super.setWinners(winners)
     }
   }
 
-  private hasCandidate () {
-    return !this.candidates.every(m => m.weight === 0)
-  }
+  // private hasCandidate () {
+  //   return !this.candidates.every(m => m[WeightedLottery.WEIGHT] === 0)
+  // }
 
   private normalize () {
     let weightSum = 0
