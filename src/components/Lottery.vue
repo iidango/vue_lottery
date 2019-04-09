@@ -32,7 +32,7 @@
                         </v-list-tile-content>
 
                         <v-list-tile avatar>
-                            <input type="number" v-model="m.weight" style="width: 40px">
+                          <input type="number" v-model="m.weight" style="width: 40px">
                         </v-list-tile>
 
                         <!-- <v-list-tile-avatar>
@@ -51,7 +51,13 @@
           <div class="operator">
             <h1>Options</h1>
             <h2>
-              Member Num: <input type="number" v-model="winnerNum" style="width: 50px" @change="updateLotterySetting">
+              Member Num:
+              <input
+                type="number"
+                v-model="winnerNum"
+                style="width: 50px"
+                @change="updateLotterySetting"
+              >
             </h2>
             <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
           </div>
@@ -80,6 +86,8 @@ let gml: GroupedList;
 let gms: GroupSelector;
 // let lottery: SimpleLottery
 let lottery: Lottery;
+let timerId: any = undefined;
+let timerInterval: number = 10;
 export default Vue.extend({
   props: {},
   data: (): {
@@ -92,8 +100,8 @@ export default Vue.extend({
     return {
       status: new Status(),
       memberList: [],
-      groupMap: new Map<MemberGroup, Set<any>>(), 
-      winnerNum: 1,
+      groupMap: new Map<MemberGroup, Set<any>>(),
+      winnerNum: 1
     };
   },
   created: function() {
@@ -105,7 +113,11 @@ export default Vue.extend({
     gms = new GroupSelector(gml);
 
     // lottery = new Lottery(gml.members, this.$data.status);
-    lottery = new WeightedLottery(gml.members, this.$data.status, this.$data.winnerNum);
+    lottery = new WeightedLottery(
+      gml.members,
+      this.$data.status,
+      this.$data.winnerNum
+    );
 
     this.$data.memberList = gml.members;
     this.$data.groupMap = gms.fetchGroupMap();
@@ -133,15 +145,21 @@ export default Vue.extend({
     action(): void {
       switch (this.$data.status.currentState) {
         case State.Waiting:
-          this.updateLotterySetting()
-          lottery.start();
+          this.status.currentState = State.Selecting
+          timerId = setInterval(this.runLottery, timerInterval);
           break;
         case State.Selecting:
-          lottery.stop();
+          this.status.currentState = State.Waiting
+          clearInterval(timerId)
           break;
         case State.Selected:
         default:
       }
+    },
+    runLottery: function() {
+      console.log('run lottery!!')
+      this.updateLotterySetting()
+      lottery.run.bind(lottery, "this")()
     },
     isSelected: function(v: object): boolean {
       return gms.isSelected(v);
@@ -161,11 +179,11 @@ export default Vue.extend({
       return {
         color: this.isSelected(m) ? "red" : ""
       };
-    }, 
-    updateLotterySetting() {
-      (lottery as WeightedLottery).winnerNum = this.$data.winnerNum
-      lottery.candidates = this.selectedMemberList;
     },
+    updateLotterySetting() {
+      (lottery as WeightedLottery).winnerNum = this.$data.winnerNum;
+      lottery.candidates = this.selectedMemberList;
+    }
   },
   filters: {},
   computed: {
