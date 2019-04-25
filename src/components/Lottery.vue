@@ -72,7 +72,7 @@ import Vue from "vue";
 import { MemberGroup } from "../model/MemberGroup";
 import { Member } from "../model/Member";
 import { Status, State } from "../model/Status";
-import { TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
+import { DataLoader, TestDataLoader, YamlDataLoader } from "../utils/DataLoader";
 import { Lottery, WeightedLottery } from "../model/Lottery";
 import { GroupedList } from "../model/GroupedList";
 import { GroupSelector, Selector } from "../model/Selector";
@@ -103,7 +103,7 @@ export default Vue.extend({
   created: function() {
     console.log("lottery on created");
     // const dl: TestDataLoader = new TestDataLoader()
-    const dl: YamlDataLoader = new YamlDataLoader();
+    const dl: DataLoader = new YamlDataLoader();
     gml = dl.loadData();
 
     gms = new GroupSelector(gml);
@@ -126,6 +126,7 @@ export default Vue.extend({
     toggleGroup(mg: MemberGroup) {
       gms.toggleGroup(mg);
     },
+    // TODO create new Member
     createNewMember(gName?: string, mName?: string) {
       gName = gName ? gName : " no name group";
       mName = mName ? mName : " no name member";
@@ -152,7 +153,6 @@ export default Vue.extend({
       }
     },
     runLottery: function() {
-      console.log('run lottery!!')
       this.updateLotterySetting()
       lottery.run.bind(lottery, "this")()
     },

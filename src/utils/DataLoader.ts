@@ -2,7 +2,7 @@ import { Member } from '../model/Member'
 import { MemberGroup } from '../model/MemberGroup'
 import { GroupedList } from '../model/GroupedList'
 
-abstract class DataLoader {
+export abstract class DataLoader {
   abstract loadData (): any
 }
 

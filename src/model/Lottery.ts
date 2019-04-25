@@ -1,4 +1,3 @@
-import { Status, State } from './Status'
 
 export class Lottery {
   static WINNER = 'winner'
@@ -43,6 +42,9 @@ export class Lottery {
 }
 
 export class WeightedLottery extends Lottery {
+  /*
+  choose multiple(winnerNum) users based on their weights
+  */
   static WEIGHT = 'weight'
   static RANK = 'rank'
 
@@ -79,26 +81,21 @@ export class WeightedLottery extends Lottery {
         order.push([m[WeightedLottery.RANK], i])
       })
 
-      this.setWinner(order)
+      // find top winnerNum scored users
+      order.sort((a, b) => - (a[0] - b[0]))
+      let winners = []
+      for (let i = 0; (i < this.winnerNum) && i < order.length; i++) {
+        winners.push(order[i][1])
+      }
+      super.setWinners(winners)
 
     } else {
       console.log('No member selected!!')
     }
   }
 
-  protected setWinner (arg: number | Array<any>) {
-    if (typeof arg === 'number') {
-      super.setWinner(arg)
-    } else {
-      arg.sort((a, b) => - (a[0] - b[0]))
-      let winners = []
-      for (let i = 0; (i < this.winnerNum) && i < arg.length; i++) {
-        winners.push(arg[i][1])
-      }
-      super.setWinners(winners)
-    }
-  }
-
+  /*
+  // no longer used
   private normalize () {
     let weightSum = 0
     this.candidates.forEach(m => weightSum += m[WeightedLottery.WEIGHT])
@@ -112,4 +109,5 @@ export class WeightedLottery extends Lottery {
       this.candidates.forEach(m => m[WeightedLottery.RANK] /= rankSum)
     }
   }
+  */
 }

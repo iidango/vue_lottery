@@ -67,6 +67,7 @@ export class Selector {
   }
 }
 
+// TODO this class might be not necessary
 export class GroupSelector extends Selector {
   private _groupedList: GroupedList
 

@@ -1,4 +1,5 @@
 
+// TODO this class might be not necessary
 export class MemberGroup {
   private static CURRENT_ID: number = 0
 
