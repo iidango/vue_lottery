@@ -189,7 +189,7 @@ export default Vue.extend({
           s = "Start!!";
           break;
         case State.Selecting:
-          s = "Selecting!!";
+          s = "Stop!!";
           break;
         case State.Selected:
           s = "Reset!!";
