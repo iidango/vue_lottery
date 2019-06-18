@@ -16,7 +16,6 @@ let v = new Vue({
           <div>
               <header-component :title="title"/>
               <lottery-component />
-              <test-component />
           </div>
         </v-app>
     `,
@@ -27,7 +26,6 @@ let v = new Vue({
   },
   components: {
     'header-component': HeaderComponent,
-    'lottery-component': LotteryComponent,
-    'test-component': TestComponent
+    'lottery-component': LotteryComponent
   }
 })

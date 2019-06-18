@@ -93,21 +93,4 @@ export class WeightedLottery extends Lottery {
       console.log('No member selected!!')
     }
   }
-
-  /*
-  // no longer used
-  private normalize () {
-    let weightSum = 0
-    this.candidates.forEach(m => weightSum += m[WeightedLottery.WEIGHT])
-    if (weightSum !== 0) {
-      this.candidates.forEach(m => m[WeightedLottery.WEIGHT] /= weightSum)
-    }
-
-    let rankSum = 0
-    this.candidates.forEach(m => rankSum += m[WeightedLottery.RANK])
-    if (rankSum !== 0) {
-      this.candidates.forEach(m => m[WeightedLottery.RANK] /= rankSum)
-    }
-  }
-  */
 }

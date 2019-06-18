@@ -27,9 +27,9 @@ export class Selector {
   }
 
   public deSelect (m: any): boolean {
-    const selecteds = this.getSlected()
+    const selected = this.getSelected()
     const mId = this.members.indexOf(m)
-    if (selecteds.includes(m)) {
+    if (selected.includes(m)) {
       m[Selector.SELECTED] = false
       return true
     } else {
@@ -37,7 +37,7 @@ export class Selector {
     }
   }
 
-  public getSlected (): Array<any> {
+  public getSelected (): Array<any> {
     return this.members.filter(m => m[Selector.SELECTED])
   }
 
