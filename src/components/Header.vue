@@ -1,7 +1,7 @@
 <!-- src/components/Header.vue -->
 <template>
     <div class="header">
-        <p>{{title}}<p/>
+        <h1>{{title}}</h1>
     </div>
 </template>
 

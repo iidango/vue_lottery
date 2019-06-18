@@ -7,7 +7,7 @@ import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loade
 
 import HeaderComponent from './components/Header.vue'
 import LotteryComponent from './components/Lottery.vue'
-import TestComponent from './components/test.vue'
+import DescriptionComponent from './components/description.vue'
 
 let v = new Vue({
   el: '#app',
@@ -16,6 +16,7 @@ let v = new Vue({
           <div>
               <header-component :title="title"/>
               <lottery-component />
+              <description-component />
           </div>
         </v-app>
     `,
@@ -26,6 +27,7 @@ let v = new Vue({
   },
   components: {
     'header-component': HeaderComponent,
-    'lottery-component': LotteryComponent
+    'lottery-component': LotteryComponent,
+    'description-component': DescriptionComponent
   }
 })

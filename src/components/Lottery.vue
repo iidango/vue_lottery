@@ -1,11 +1,11 @@
-<!-- src/components/MemberSelect.vue -->
+<!-- src/components/Lottery.vue -->
 <template>
   <div id="lottery">
     <v-layout column align-start>
       <v-flex xs32>
         <v-layout row>
           <div class="member-selector">
-            <h1>Member List</h1>
+            <!-- <h1>Member List</h1> -->
             <v-layout row>
               <div v-for="[group, ml] of groupMap" :key="group.id" class="group-panel">
                 <v-layout column>
@@ -58,7 +58,7 @@
                 style="width: 50px"
               >
             </h2>
-            <v-btn color="success" @click="action()">{{currentStatus}}</v-btn>
+            <v-btn large color="success" @click="action()">{{currentStatus}}</v-btn>
           </div>
         </v-layout>
       </v-flex>
@@ -117,7 +117,7 @@ export default Vue.extend({
     this.$data.memberList = gml.members;
     this.$data.groupMap = gms.fetchGroupMap();
 
-    this.setMemberProparty();
+    this.initMemberProparty();
   },
   methods: {
     toggleMember(m: Member) {
@@ -162,9 +162,9 @@ export default Vue.extend({
     isWinner: function(v: Member): boolean {
       return lottery.isWinner(v);
     },
-    setMemberProparty: function() {
+    initMemberProparty: function() {
       this.$data.memberList.forEach((m: object) => {
-        this.$set(m, Selector.SELECTED, false);
+        this.$set(m, Selector.SELECTED, true);
         this.$set(m, Lottery.WINNER, false);
         this.$set(m, WeightedLottery.WEIGHT, 1.0);
         this.$set(m, WeightedLottery.RANK, 0.0);
