@@ -10,6 +10,35 @@ $ yarn install
 $ yarn start
 ```
 
+## Edit memberList
+Please add src/memberList.yml.
+
+``` yaml src/memberList.yml
+memberList:
+  桃太郎:
+    - 桃太郎
+    - さる
+    - いぬ
+    - きじ
+    - おに
+  金太郎:
+    - 金太郎
+    - 母親
+    - くま
+  さるかに合戦:
+    - さる
+    - かに
+    - くり
+    - はち
+    - 牛のフン
+    - 臼
+  カチカチ山:
+    - おじいさん
+    - おばあさん
+    - たぬき
+    - うさぎ
+```
+
 # Deploy with basic auth
 ## Setup firebase
 ``` bash
